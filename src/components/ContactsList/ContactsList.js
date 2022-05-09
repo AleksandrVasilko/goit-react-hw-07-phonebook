@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import s from './ContactsList.module.css'
-import { getVisibleContacts } from 'redux/phonebook/selectors';
-import { deleteContactAction } from 'redux/phonebook/actions';
+import { deleteContacts, fetchContacts, getVisibleContacts } from 'redux/phonebook/selectors';
+import { useEffect } from 'react'; 
 
 export default function Contacts() {
     const contacts = useSelector(getVisibleContacts);
@@ -9,20 +9,25 @@ export default function Contacts() {
     const dispatch = useDispatch();
 
     const onDeleteContact = id => {
-        dispatch(deleteContactAction(id));
+        //console.log('передали ID', id)
+        dispatch(deleteContacts(id));
     };
+
+    useEffect(() => {
+        dispatch(fetchContacts());
+    }, [dispatch]);
 
     return (
         <div>
         <p className={s.title}>Contacts</p>
         <ul className={s.contactList}>
-            {contacts.map(({ id, name, number }) => (
+            {contacts.map(({ id, name, phone }) => (
                 <li
                     key={id}
                     className={s.contactList__item}>
                     
                     <span className={s.contactList__text}>{name}: </span>
-                    <span className={s.contactList__text}>{number}</span>
+                    <span className={s.contactList__text}>{phone}</span>
                 
                     <button
                         type="button"

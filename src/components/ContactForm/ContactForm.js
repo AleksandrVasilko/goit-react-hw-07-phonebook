@@ -1,13 +1,13 @@
 import s from './ContactForm.module.css'
 import { useState } from 'react';
 import { useDispatch, useSelector  } from 'react-redux';
-import { getContacts } from '../../redux/phonebook/selectors';
-import { addContactAction } from '../../redux/phonebook/actions';
+import { addContacts, getContacts } from '../../redux/phonebook/selectors';
+
 
 export default function ContactForm() {
     
     const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
+    const [phone, setPhone] = useState('');
     const contacts = useSelector(getContacts);
     const dispatch = useDispatch();
        
@@ -19,7 +19,7 @@ export default function ContactForm() {
                 setName(value);
                 break;
             case 'number':
-                setNumber(value);
+                setPhone(value);
                 break
             default:
                 return;
@@ -32,9 +32,9 @@ export default function ContactForm() {
 			return contact.name.toLowerCase() === name.toLowerCase();
 		});
 		if (!repeatName) {
-			dispatch(addContactAction(name, number));
+            dispatch(addContacts({ name, phone }));
             setName('')
-            setNumber('')
+            setPhone('')
             return
         }
         alert(`${name} is already in contacts`);
@@ -64,7 +64,7 @@ export default function ContactForm() {
                         pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
                         title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                         required
-                        value={number}
+                        value={phone}
                         onChange={handleChange}
                         className={s.inputField}
                     />
